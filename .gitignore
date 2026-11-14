@@ -1,5 +1,5 @@
 .dart_tool/
 .packages
 build/
+# dati di runtime (JSON + curriculum): ricreati all'avvio
 data/
-!data/.gitkeep
