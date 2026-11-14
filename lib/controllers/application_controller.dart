@@ -35,7 +35,8 @@ class ApplicationController {
     final job = jobs.findById(int.tryParse(id) ?? -1);
     if (job == null) throw const ApiException(404, 'Annuncio non trovato');
 
-    final form = await readMultipartForm(req, maxBytes: CvStorage.maxBytes + 256 * 1024);
+    final form =
+        await readMultipartForm(req, maxBytes: CvStorage.maxBytes + 256 * 1024);
     final input = validateApplication(form.fields);
 
     final upload = form.files['cv'];
@@ -109,7 +110,8 @@ class ApplicationController {
     final job = jobs.findById(application.jobId);
     final company = currentCompany(req)!;
     if (job == null || job.companyId != company.id) {
-      throw const ApiException(403, 'Questa candidatura non riguarda i tuoi annunci');
+      throw const ApiException(
+          403, 'Questa candidatura non riguarda i tuoi annunci');
     }
     return application;
   }

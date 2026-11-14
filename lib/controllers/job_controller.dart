@@ -43,8 +43,8 @@ class JobController {
     final company = currentCompany(req)!;
     final list = jobs
         .byCompany(company.id)
-        .map((j) => j.toPublicJson(
-            applicationsCount: applications.countByJob(j.id)))
+        .map((j) =>
+            j.toPublicJson(applicationsCount: applications.countByJob(j.id)))
         .toList();
     return jsonResponse(list);
   }
@@ -67,7 +67,8 @@ class JobController {
   }
 
   int _parseId(String raw) =>
-      int.tryParse(raw) ?? (throw const ApiException(404, 'Annuncio non trovato'));
+      int.tryParse(raw) ??
+      (throw const ApiException(404, 'Annuncio non trovato'));
 }
 
 /// Carica un annuncio verificando che appartenga all'azienda autenticata.
@@ -76,7 +77,8 @@ Job ownedJob(JobDao jobs, Request req, String id) {
   if (job == null) throw const ApiException(404, 'Annuncio non trovato');
   final company = currentCompany(req)!;
   if (job.companyId != company.id) {
-    throw const ApiException(403, 'Questo annuncio non appartiene alla tua azienda');
+    throw const ApiException(
+        403, 'Questo annuncio non appartiene alla tua azienda');
   }
   return job;
 }

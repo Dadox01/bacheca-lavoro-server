@@ -36,11 +36,13 @@ Future<void> main() async {
   final tokens = TokenService();
 
   final health = Router()
-    ..get('/api/health', (Request req) => jsonResponse({
-          'status': 'ok',
-          'jobs': jobDao.all().length,
-          'applications': applicationDao.all().length,
-        }));
+    ..get(
+        '/api/health',
+        (Request req) => jsonResponse({
+              'status': 'ok',
+              'jobs': jobDao.all().length,
+              'applications': applicationDao.all().length,
+            }));
 
   // Cascade: ogni controller dichiara i path completi e i 404 "di business"
   // sono ApiException, quindi non vengono scambiati per "rotta non trovata".
@@ -60,9 +62,11 @@ Future<void> main() async {
       .addHandler(api);
 
   final server = await io.serve(handler, InternetAddress.anyIPv4, port);
-  stdout.writeln('Bacheca lavoro - backend in ascolto sulla porta ${server.port}');
+  stdout.writeln(
+      'Bacheca lavoro - backend in ascolto sulla porta ${server.port}');
   stdout.writeln('Dati persistenti in: ${Directory(dataDir).absolute.path}');
-  stdout.writeln('Simulatore iOS / macOS / browser: http://127.0.0.1:${server.port}');
+  stdout.writeln(
+      'Simulatore iOS / macOS / browser: http://127.0.0.1:${server.port}');
   stdout.writeln('Emulatore Android: http://10.0.2.2:${server.port}');
   try {
     final interfaces = await NetworkInterface.list(

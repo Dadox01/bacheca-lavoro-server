@@ -33,7 +33,8 @@ Future<MultipartForm> readMultipartForm(
 }) async {
   final header = request.headers['content-type'] ?? '';
   if (!header.toLowerCase().startsWith('multipart/form-data')) {
-    throw const ApiException(400, 'Richiesta non valida: atteso multipart/form-data');
+    throw const ApiException(
+        400, 'Richiesta non valida: atteso multipart/form-data');
   }
   final boundary = _boundary(header);
   if (boundary == null) {
@@ -50,8 +51,10 @@ Future<MultipartForm> readMultipartForm(
 
   // shelf restituisce Stream<Uint8List>: il cast lo rende compatibile con il
   // transformer di package:mime, tipizzato su Stream<List<int>>.
-  final parts =
-      request.read().cast<List<int>>().transform(MimeMultipartTransformer(boundary));
+  final parts = request
+      .read()
+      .cast<List<int>>()
+      .transform(MimeMultipartTransformer(boundary));
   await for (final part in parts) {
     final disposition = part.headers['content-disposition'] ?? '';
     final fieldName = _param(disposition, 'name');
@@ -60,12 +63,14 @@ Future<MultipartForm> readMultipartForm(
       continue;
     }
 
-    final rawFilename = _param(disposition, 'filename') ?? _extendedParam(disposition, 'filename');
+    final rawFilename = _param(disposition, 'filename') ??
+        _extendedParam(disposition, 'filename');
     final chunks = <List<int>>[];
     await for (final chunk in part) {
       total += chunk.length;
       if (total > maxBytes) {
-        throw const ApiException(413, 'Il file allegato supera il limite di 5 MB');
+        throw const ApiException(
+            413, 'Il file allegato supera il limite di 5 MB');
       }
       chunks.add(chunk);
     }

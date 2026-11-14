@@ -50,7 +50,8 @@ class AuthController {
     final input = validateLogin(await readJsonObject(req));
     final company = companies.findByEmail(input.email);
     final ok = company != null &&
-        PasswordService.verify(input.password, company.salt, company.passwordHash);
+        PasswordService.verify(
+            input.password, company.salt, company.passwordHash);
     if (!ok) throw const ApiException(401, 'Email o password non corretti');
     final token = tokens.issue(company.id);
     return jsonResponse({'token': token, 'company': company.toPublicJson()});

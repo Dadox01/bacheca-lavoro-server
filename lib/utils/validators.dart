@@ -49,7 +49,11 @@ String _text(Map<String, dynamic> m, String key, String label, int max,
   if (v is! String) throw ApiException(422, '$label obbligatorio');
   final s = v.trim();
   if (s.length < min) {
-    throw ApiException(422, min <= 1 ? '$label obbligatorio' : '$label troppo corto (minimo $min caratteri)');
+    throw ApiException(
+        422,
+        min <= 1
+            ? '$label obbligatorio'
+            : '$label troppo corto (minimo $min caratteri)');
   }
   if (s.length > max) {
     throw ApiException(422, '$label troppo lungo (massimo $max caratteri)');
@@ -86,7 +90,10 @@ RegisterInput validateRegister(Map<String, dynamic> b) {
 ({String email, String password}) validateLogin(Map<String, dynamic> b) {
   final email = b['email'];
   final password = b['password'];
-  if (email is! String || password is! String || email.trim().isEmpty || password.isEmpty) {
+  if (email is! String ||
+      password is! String ||
+      email.trim().isEmpty ||
+      password.isEmpty) {
     throw const ApiException(422, 'Email e password sono obbligatorie');
   }
   return (email: email.trim(), password: password);
@@ -117,7 +124,8 @@ JobInput validateJob(Map<String, dynamic> b) {
 
   final c = b['contract'];
   if (c is! String || !kContractTypes.contains(c.trim())) {
-    throw ApiException(422, 'Tipo di contratto non valido. Valori ammessi: ${kContractTypes.join(', ')}');
+    throw ApiException(422,
+        'Tipo di contratto non valido. Valori ammessi: ${kContractTypes.join(', ')}');
   }
 
   final rawSalary = b['salary'];
@@ -129,7 +137,8 @@ JobInput validateJob(Map<String, dynamic> b) {
     if (s.isEmpty) {
       salary = null;
     } else if (s.length > 40) {
-      throw const ApiException(422, 'Retribuzione troppo lunga (massimo 40 caratteri)');
+      throw const ApiException(
+          422, 'Retribuzione troppo lunga (massimo 40 caratteri)');
     } else {
       salary = s;
     }
@@ -166,11 +175,13 @@ class ApplicationInput {
 ApplicationInput validateApplication(Map<String, String> fields) {
   final firstName = _text(fields, 'firstName', 'Nome', 40, min: 2);
   if (!_nameRe.hasMatch(firstName)) {
-    throw const ApiException(422, "Il nome può contenere solo lettere, spazi e apostrofi");
+    throw const ApiException(
+        422, "Il nome può contenere solo lettere, spazi e apostrofi");
   }
   final lastName = _text(fields, 'lastName', 'Cognome', 40, min: 2);
   if (!_nameRe.hasMatch(lastName)) {
-    throw const ApiException(422, 'Il cognome può contenere solo lettere, spazi e apostrofi');
+    throw const ApiException(
+        422, 'Il cognome può contenere solo lettere, spazi e apostrofi');
   }
   final email = fields['email'];
   if (email is! String || !isValidEmail(email)) {
@@ -178,7 +189,8 @@ ApplicationInput validateApplication(Map<String, String> fields) {
   }
   final message = (fields['message'] ?? '').trim();
   if (message.length > 1000) {
-    throw const ApiException(422, 'Lettera di presentazione troppo lunga (massimo 1000 caratteri)');
+    throw const ApiException(
+        422, 'Lettera di presentazione troppo lunga (massimo 1000 caratteri)');
   }
   return ApplicationInput(
     firstName: firstName,
